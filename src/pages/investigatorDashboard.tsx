@@ -1,12 +1,25 @@
-import { useEffect, useState } from "react";
+ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { useRouter } from "next/router";
+
+// Define the structure of a query
+interface Query {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  student: {
+    name: string;
+  };
+  resolver: {
+    name: string;
+  };
+}
 
 const InvestigatorDashboard = () => {
-  const [queries, setQueries] = useState<any[]>([]); // Adjust based on actual query structure
+  // Use specific types instead of 'any'
+  const [queries, setQueries] = useState<Query[]>([]); // Queries state, typed as an array of Query objects
   const [loading, setLoading] = useState(false);
-  const [selectedQuery, setSelectedQuery] = useState<any | null>(null); // Holds selected query details
-  const router = useRouter();
+  const [selectedQuery, setSelectedQuery] = useState<Query | null>(null); // selectedQuery can either be a Query object or null
 
   useEffect(() => {
     fetchAssignedQueries();
@@ -27,7 +40,7 @@ const InvestigatorDashboard = () => {
       });
       console.log("response ", response);
       if (response.ok) {
-        const data = await response.json();
+        const data: Query[] = await response.json(); // Type the response data as an array of Query objects
         setQueries(data);
       } else {
         throw new Error("Failed to fetch queries");
@@ -63,7 +76,15 @@ const InvestigatorDashboard = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <Navbar title="Investigator Dashboard" />
+      <Navbar
+        title="Investigator Dashboard"
+        onQueriesClick={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+        onAddQueryClick={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
 
       <div className="p-6">
         <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">Investigator Dashboard</h1>

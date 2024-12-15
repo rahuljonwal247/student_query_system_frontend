@@ -72,7 +72,11 @@ const CreateUser = () => {
       <Head>
         <title>Admin Dashboard</title>
       </Head>
-      <Navbar title="Admin Dashboard" />
+      <Navbar title="Admin Dashboard" onQueriesClick={function (): void {
+        throw new Error("Function not implemented.");
+      } } onAddQueryClick={function (): void {
+        throw new Error("Function not implemented.");
+      } } />
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
       
       <div className="bg-white shadow-md rounded-lg p-8 max-w-lg w-full">

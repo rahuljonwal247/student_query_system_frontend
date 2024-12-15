@@ -1,12 +1,6 @@
-
-
-
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
-import { useRouter } from "next/router";
-import io from "socket.io-client";
 
 interface Query {
   id: string;
@@ -24,32 +18,20 @@ interface Notes {
 const ResolverDashboard = () => {
   const [queries, setQueries] = useState<Query[]>([]);
   const [selectedQuery, setSelectedQuery] = useState<Query | null>(null);
-  const [internalNotes, setInternalNotes] = useState<Notes>({});
   const [resolutionSummaries, setResolutionSummaries] = useState<Notes>({});
   const [resolvedAt, setResolvedAt] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [filter, setFilter] = useState<"all" | "pending" | "in-progress" | "resolved">("all");
   const [successMessage, setSuccessMessage] = useState<string | null>(null); // Message state
-  const router = useRouter();
-  const socket = io("http://localhost:5000"); // Connect to your backend socket server
+  
 
   useEffect(() => {
     // Fetch queries when the filter changes
     fetchAssignedQueries();
 
-    // Listen for real-time updates on query changes (e.g., when a query's status is updated)
-    socket.on("query-updated", (updatedQuery: Query) => {
-      setQueries((prevQueries) =>
-        prevQueries.map((q) =>
-          q.id === updatedQuery.id ? { ...q, status: updatedQuery.status } : q
-        )
-      );
-    });
 
     // Cleanup socket listeners when the component unmounts
-    return () => {
-      socket.off("query-updated");
-    };
+   
   }, [filter]);
 
  
@@ -81,7 +63,7 @@ const ResolverDashboard = () => {
       console.log("Fetched data:", data);
       setQueries(data);
     } catch (err) {
-      console.error("Error fetching assigned queries:", err.message);
+      console.error("Error fetching assigned queries:", (err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -95,7 +77,6 @@ const ResolverDashboard = () => {
         `https://student-query-system.onrender.com/api/queries/updateQueryStatus/${queryId}`,
         {
           status,
-          internalNote: internalNotes[queryId] || "",
           resolutionSummary: resolutionSummaries[queryId] || "",
           resolvedAt: currentTime,
         },
@@ -107,7 +88,7 @@ const ResolverDashboard = () => {
           prev.map((q) => (q.id === queryId ? { ...q, status } : q))
         );
         setResolvedAt((prev) => ({ ...prev, [queryId]: currentTime }));
-       // setSuccessMessage("Query resolved successfully!");
+       
         setTimeout(() => {
           setSuccessMessage(null); // Clear message after timeout
           setFilter("pending"); // Show the pending queries again
@@ -121,7 +102,6 @@ const ResolverDashboard = () => {
 
   const sendToInvestigation = async (queryId: string) => {
     const token = localStorage.getItem("token");
-    const currentTime = new Date().toLocaleString();
     try {
       const response = await axios.post(
         `https://student-query-system.onrender.com/api/queries/sendToInvestigation/${queryId}`,
@@ -141,9 +121,6 @@ const ResolverDashboard = () => {
     }
   };
 
-  const handleInternalNoteChange = (queryId: string, note: string) => {
-    setInternalNotes((prev: Notes) => ({ ...prev, [queryId]: note }));
-  };
 
   const handleResolutionSummaryChange = (queryId: string, summary: string) => {
     setResolutionSummaries((prev: Notes) => ({ ...prev, [queryId]: summary }));
