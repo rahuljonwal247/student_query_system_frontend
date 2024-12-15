@@ -1,86 +1,3 @@
-
-
-// import { useRouter } from "next/router";
-// import { useEffect, useState } from "react";
-
-// const Navbar = ({
-//   title,
-//   onQueriesClick,
-// }: {
-//   title: string;
-//   onQueriesClick: () => void;
-// }) => {
-//   const [user, setUser] = useState<string | null>(null); // Manage user in state
-  
-
-//   // Load user from localStorage in the browser
-//   useEffect(() => {
-//     if (typeof window !== 'undefined') {
-//       const storedUser = localStorage.getItem('user');
-//       setUser(storedUser);
-//     }
-//   }, []);
-//   const router = useRouter();
-//   const handleLogout = () => {
-//     localStorage.removeItem("token"); // Clear token
-//     localStorage.removeItem("user"); // Clear token
-//     router.push("/login"); // Redirect to login
-//   };
-
-//   // auth user fetch
-
-//   // find role
-
-//   return (
-//     <nav className="bg-blue-500 text-white p-4 flex justify-between items-center">
-//       <h1 className="text-xl font-bold">{title}</h1>
-//       <div className="space-x-4">
-//         {user === "student" ? (
-//           <div>
-//             <button
-//               onClick={onQueriesClick}
-//               className="px-4 py-2 bg-green-500 rounded hover:bg-green-600"
-//             >
-//               Your Queries
-//             </button>
-//             <button
-//               onClick={onQueriesClick}
-//               className="px-4 py-2 bg-green-500 rounded hover:bg-green-600"
-//             >
-//               Add Queries
-//             </button>
-//           </div>
-//         ) : (
-//           <div>
-//             <button
-//               onClick={onQueriesClick}
-//               className="px-4 py-2 bg-green-500 rounded hover:bg-green-600"
-//             >
-//               Pending Queries
-//             </button>
-//             <button
-//               onClick={onQueriesClick}
-//               className="px-4 py-2 bg-green-500 rounded hover:bg-green-600"
-//             >
-//               Complete Queries
-//             </button>
-//           </div>
-//         )}
-//         <button
-//           onClick={handleLogout}
-//           className="px-4 py-2 bg-red-500 rounded hover:bg-red-600"
-//         >
-//           Logout
-//         </button>
-//       </div>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
-
-
-
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -173,7 +90,7 @@ const Navbar = ({ title, onQueriesClick, onAddQueryClick }: NavbarProps) => {
             </button>
           </>
         ) : (
-          <p>Loading...</p>
+          <p></p>
         )}
         <button
           onClick={handleLogout}

@@ -1,5 +1,4 @@
 
-
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -39,10 +38,21 @@ const Login = () => {
         localStorage.setItem('user', data.user.role);
   
         // Redirect based on user role
-        if (data?.user?.role === 'student') {
-          router.push('/student-dashboard');
-        } else {
-          router.push('/resolver-dashboard');
+        switch (data?.user?.role) {
+          case 'student':
+            router.push('/student-dashboard');
+            break;
+          case 'resolver':
+            router.push('/resolver-dashboard');
+            break;
+          case 'admin':
+            router.push('/adminDashboard');
+            break;
+          case 'investigator':
+            router.push('/investigatorDashboard');
+            break;
+          default:
+            throw new Error("Unknown role");
         }
       } else {
         throw new Error("Failed to retrieve user data.");
